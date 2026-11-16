@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /go.html
+
+Sitemap: https://zapis-lor.vercel.app/sitemap.xml
