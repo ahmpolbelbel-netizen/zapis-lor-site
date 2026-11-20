@@ -1038,7 +1038,7 @@ const SUPABASE_KEY = RAW_KEY.trim();
    <input id="lob-phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="777 777-77-77" maxlength="32" aria-label="Номер мобильного телефона">
   </div>
   <div class="lob-stepbadge" id="lob-step1">Шаг 1 из 2 · запись ещё не создана</div>
-  <div class="lob-actions"><button class="lob-primary" id="lob-submit" type="button" aria-live="polite">Записаться</button></div>
+  <div class="lob-actions"><button class="lob-primary" id="lob-submit" type="button" aria-live="polite">Продолжить</button></div>
   <div class="lob-status" id="lob-status" role="status"></div>
   <div class="lob-note"><div class="lob-push-hint">После записи браузер предложит включить уведомления.</div>
    <div class="lob-no-slot">Если Вы не нашли подходящее время, свяжитесь с врачом по телефону или в <a href="https://wa.me/77072131010" target="_blank" rel="noopener">WhatsApp</a>, чтобы уточнить возможность приёма: <a href="tel:+77072131010">+7 (707) 213‑10‑10</a></div>
@@ -1080,7 +1080,7 @@ const SUPABASE_KEY = RAW_KEY.trim();
 (function(){
  const box=document.getElementById('lor-online-booking'), confirmBox=document.getElementById('lob-confirm'), confirmSummary=document.getElementById('lob-confirm-summary'), confirmError=document.getElementById('lob-confirm-error'), confirmIntro=document.getElementById('lob-confirm-intro'), confirmTitle=document.getElementById('lob-confirm-title'), confirmClose=document.getElementById('lob-confirm-close'), confirmOk=document.getElementById('lob-confirm-ok'), confirmEdit=document.getElementById('lob-confirm-edit'), confirmCalendar=document.getElementById('lob-confirm-calendar'), confirmScreenshot=document.getElementById('lob-confirm-screenshot'), saveStatus=document.getElementById('lob-confirm-save-status'), confirmIcs=document.getElementById('lob-confirm-ics'), dateEl=document.getElementById('lob-date'), dateTrigger=document.getElementById('lob-date-trigger'), dateCalendar=document.getElementById('lob-date-calendar'), calendarMonth=document.getElementById('lob-calendar-month'), calendarDays=document.getElementById('lob-calendar-days'), calendarPrev=document.getElementById('lob-calendar-prev'), calendarNext=document.getElementById('lob-calendar-next'), slotEl=document.getElementById('lob-slot'), timeTrigger=document.getElementById('lob-mobile-time-trigger'), timeOptions=document.getElementById('lob-mobile-time-options'), phoneEl=document.getElementById('lob-phone'), countryEl=document.getElementById('lob-country'), countryTrigger=document.getElementById('lob-country-trigger'), countryLabel=document.getElementById('lob-country-label'), countryMenu=document.getElementById('lob-country-options'), otherCodeEl=document.getElementById('lob-other-code'), statusEl=document.getElementById('lob-status'), submit=document.getElementById('lob-submit');
  const duplicateBox=document.getElementById('lob-duplicate'), duplicateCopy=document.getElementById('lob-duplicate-copy'), duplicateError=document.getElementById('lob-duplicate-error'), duplicateMove=document.getElementById('lob-duplicate-move'), duplicateKeep=document.getElementById('lob-duplicate-keep'), duplicateChange=document.getElementById('lob-duplicate-change');
- let bookingStatusTimer=0;function setBookingStatus(message,label,disabled){const full=String(message||'');clearTimeout(bookingStatusTimer);statusEl.textContent=full;submit.textContent=full?String(label||full):'Записаться';submit.classList.toggle('lob-status-label',!!full);if(typeof disabled==='boolean')submit.disabled=disabled;if(full&&!disabled)bookingStatusTimer=setTimeout(()=>{statusEl.textContent='';submit.textContent='Записаться';submit.classList.remove('lob-status-label')},3500);}
+ let bookingStatusTimer=0;function setBookingStatus(message,label,disabled){const full=String(message||'');clearTimeout(bookingStatusTimer);statusEl.textContent=full;submit.textContent=full?String(label||full):'Продолжить';submit.classList.toggle('lob-status-label',!!full);if(typeof disabled==='boolean')submit.disabled=disabled;if(full&&!disabled)bookingStatusTimer=setTimeout(()=>{statusEl.textContent='';submit.textContent='Продолжить';submit.classList.remove('lob-status-label')},3500);}
  const patientPushBox=document.getElementById('lob-patient-push'), patientPushButton=document.getElementById('lob-patient-push-toggle'), patientPushStatus=document.getElementById('lob-patient-push-status');
  function setPatientPushStatus(message){const text=String(message||''),phrase='Разрешите уведомления для сайта в настройках браузера',i=text.indexOf(phrase);patientPushStatus.replaceChildren();if(i<0){patientPushStatus.textContent=text;return}patientPushStatus.append(document.createTextNode(text.slice(0,i)));const link=document.createElement('a');link.href='https://support.google.com/chrome/answer/3220216?hl=ru';link.target='_blank';link.rel='noopener noreferrer';link.textContent=phrase;patientPushStatus.append(link,document.createTextNode(text.slice(i+phrase.length)));}
  let patientPushBookingId='', patientPushPhone='', patientPushRegistration=null, patientPushSubscription=null, patientPushVapidKey='', patientPushEnabled=false, patientPushBusy=false;
@@ -1150,7 +1150,7 @@ const SUPABASE_KEY = RAW_KEY.trim();
   try{
    await patientPushInit();
    const check=await rpc('online_check_book_slot',{p_slot_id:id,p_phone:phone});
-   if(check&&check.result==='duplicate'){setBookingStatus('','Записаться',false);showDuplicate(check);return;}
+   if(check&&check.result==='duplicate'){setBookingStatus('','Продолжить',false);showDuplicate(check);return;}
    if(check&&check.result==='already_booked'){setBookingStatus('На это время по этому номеру запись уже сохранена.','Запись уже есть',false);return;}
    if(!check||check.result!=='ready')throw Error('Не удалось проверить выбранное время.');
    confirmTitle.querySelector('span').textContent='Онлайн-запись ЛОР';confirmOk.hidden=false;
@@ -1163,7 +1163,7 @@ const SUPABASE_KEY = RAW_KEY.trim();
    const tz=document.createElement('div');tz.className='lob-confirm-timezone';tz.textContent='Часовой пояс: Астана (UTC+5).';detail.append(phoneBlock,tz);confirmSummary.appendChild(detail);
    confirmError.hidden=true;confirmError.textContent='';confirmOk.disabled=false;confirmOk.textContent='Записаться';confirmEdit.hidden=false;confirmCalendar.hidden=true;confirmBox.hidden=false;confirmOk.focus();
   }catch(e){const m='Не удалось проверить выбранное время: '+String(e&&e.message||e);setBookingStatus(m,'Ошибка проверки',false)}
-  finally{if(submit.textContent==='Проверяю…')setBookingStatus('','Записаться',false);}
+  finally{if(submit.textContent==='Проверяю…')setBookingStatus('','Продолжить',false);}
  }
  submit.addEventListener('click',openConfirmation);
  confirmEdit.addEventListener('click',()=>{if(bookingSaved){confirmBox.hidden=true;return}confirmBox.hidden=true;submit.focus()});
