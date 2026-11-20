@@ -984,6 +984,7 @@ const SUPABASE_KEY = RAW_KEY.trim();
 #lob-confirm .lob-confirm-title{position:relative;display:flex;align-items:center;height:42px;min-height:42px;margin:0 -16px 14px;padding:2px 46px 2px 12px;background:linear-gradient(90deg,#000080,#1084d0);color:#fff;font-weight:bold;font-size:18px}
 #lob-confirm .lob-confirm-close{position:absolute;right:2px;top:2px;bottom:2px;transform:none;display:grid;place-items:center;box-sizing:border-box;width:38px;height:38px;min-width:38px;flex:0 0 38px;margin:0;padding:0;background:#c0c0c0;color:#000;border-top:1px solid #fff;border-left:1px solid #fff;border-right:1px solid #404040;border-bottom:1px solid #404040;border-radius:0;font-size:0;line-height:0;cursor:pointer}
 #lor-online-booking .lob-titlebar button svg,#lob-confirm .lob-confirm-close svg{display:block;width:79%;height:79%}
+.lob-stepbadge{display:inline-block;background:#00555e;color:#fff;border-radius:10px;padding:4px 12px;font:bold 13px Tahoma,"MS Sans Serif",Arial,sans-serif;margin:0 0 10px}
 #lob-confirm .lob-confirm-intro{margin:0 0 12px;line-height:1.45}
 #lob-confirm .lob-confirm-summary{background:#fff;border:1px solid #777;padding:12px;line-height:1.55;overflow-wrap:anywhere;font-size:19px}
 #lob-confirm .lob-confirm-summary strong{display:block;margin-bottom:3px}
@@ -1036,6 +1037,7 @@ const SUPABASE_KEY = RAW_KEY.trim();
    <input id="lob-other-code" type="tel" inputmode="numeric" placeholder="Код страны без +" aria-label="Код другой страны" style="display:none;max-width:150px">
    <input id="lob-phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="777 777-77-77" maxlength="32" aria-label="Номер мобильного телефона">
   </div>
+  <div class="lob-stepbadge" id="lob-step1">Шаг 1 из 2 · запись ещё не создана</div>
   <div class="lob-actions"><button class="lob-primary" id="lob-submit" type="button" aria-live="polite">Записаться</button></div>
   <div class="lob-status" id="lob-status" role="status"></div>
   <div class="lob-note"><div class="lob-push-hint">После записи браузер предложит включить уведомления.</div>
@@ -1043,7 +1045,8 @@ const SUPABASE_KEY = RAW_KEY.trim();
   </div>
  </div></div>
  <div id="lob-confirm" hidden role="dialog" aria-modal="true" aria-labelledby="lob-confirm-title">
-  <div class="lob-confirm-card"><div class="lob-confirm-title" id="lob-confirm-title"><span>Проверьте запись</span><button id="lob-confirm-close" class="lob-confirm-close" type="button" aria-label="Закрыть окно подтверждения"><svg viewBox="0 0 100 100" aria-hidden="true" focusable="false" shape-rendering="crispEdges"><path fill="#000" d="M 7.16 16 H 24.84 L 92.84 84 H 75.16 Z M 75.16 16 H 92.84 L 24.84 84 H 7.16 Z"/></svg></button></div>
+  <div class="lob-confirm-card"><div class="lob-confirm-title" id="lob-confirm-title"><span>Онлайн-запись ЛОР</span><button id="lob-confirm-close" class="lob-confirm-close" type="button" aria-label="Закрыть окно подтверждения"><svg viewBox="0 0 100 100" aria-hidden="true" focusable="false" shape-rendering="crispEdges"><path fill="#000" d="M 7.16 16 H 24.84 L 92.84 84 H 75.16 Z M 75.16 16 H 92.84 L 24.84 84 H 7.16 Z"/></svg></button></div>
+   <div class="lob-stepbadge" id="lob-step2">Шаг 2 из 2</div>
    <p class="lob-confirm-intro" id="lob-confirm-intro">Проверьте дату, время и номер телефона. Запись будет создана только после нажатия «Записаться».</p>
    <div class="lob-confirm-summary" id="lob-confirm-summary"></div>
    <div class="lob-confirm-error" id="lob-confirm-error" role="alert" hidden></div>
@@ -1150,7 +1153,7 @@ const SUPABASE_KEY = RAW_KEY.trim();
    if(check&&check.result==='duplicate'){setBookingStatus('','Записаться',false);showDuplicate(check);return;}
    if(check&&check.result==='already_booked'){setBookingStatus('На это время по этому номеру запись уже сохранена.','Запись уже есть',false);return;}
    if(!check||check.result!=='ready')throw Error('Не удалось проверить выбранное время.');
-   confirmTitle.querySelector('span').textContent='Проверьте запись';confirmOk.hidden=false;
+   confirmTitle.querySelector('span').textContent='Онлайн-запись ЛОР';confirmOk.hidden=false;
    confirmIntro.textContent='Проверьте дату, время и номер телефона. После нажатия «Записаться» браузер может запросить разрешение на напоминания.';
    confirmSummary.replaceChildren();
    const detail=document.createElement('div');detail.innerHTML='<strong>Дата и время записи ЛОР</strong>';
